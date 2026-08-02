@@ -2,84 +2,488 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Senet Royal</title>
 
 <style>
-html,body{
-    margin:0;
-    min-height:100%;
-    background:#0b0704;
-    color:#f0d28b;
-    font-family:Georgia,serif;
-}
+*{box-sizing:border-box}
 
 body{
-    display:flex;
-    justify-content:center;
+ margin:0;
+ background:#090604;
+ color:#efd18b;
+ font-family:Georgia,serif;
 }
 
 #app{
-    width:100%;
-    max-width:600px;
-    min-height:100vh;
-    text-align:center;
-    padding:30px 20px;
-    box-sizing:border-box;
+ max-width:620px;
+ margin:auto;
+ min-height:100vh;
+ padding:16px;
 }
 
-.logo{
-    margin-top:70px;
-    font-size:36px;
-    font-weight:bold;
-    letter-spacing:4px;
+header{
+ text-align:center;
+ padding:20px 0;
 }
 
 .ankh{
-    font-size:70px;
-    color:#e2b85d;
+ font-size:55px;
+ color:#e3b65c;
 }
 
-.subtitle{
-    margin-top:10px;
-    color:#a88a55;
-    font-size:13px;
-    letter-spacing:2px;
+h1{
+ margin:5px 0;
+ font-size:28px;
+ letter-spacing:3px;
+}
+
+.sub{
+ color:#a88b59;
+ font-size:11px;
+ letter-spacing:2px;
+}
+
+.card{
+ background:#171009;
+ border:1px solid #654722;
+ border-radius:20px;
+ padding:18px;
 }
 
 button{
-    width:100%;
-    margin-top:40px;
-    padding:17px;
-    border:0;
-    border-radius:14px;
-    background:linear-gradient(#e5c06f,#9c692b);
-    color:#1b1007;
-    font-size:18px;
-    font-weight:bold;
+ font-family:inherit;
+ cursor:pointer;
+}
+
+.main{
+ width:100%;
+ border:0;
+ border-radius:13px;
+ padding:16px;
+ margin-top:15px;
+ background:linear-gradient(#e5c16d,#99672b);
+ color:#1b1007;
+ font-size:17px;
+ font-weight:bold;
+}
+
+.board{
+ margin-top:18px;
+ padding:6px;
+ background:#815b2d;
+ border-radius:15px;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(10,1fr);
+ border-radius:10px;
+ overflow:hidden;
+}
+
+.cell{
+ aspect-ratio:1;
+ background:#d5b36c;
+ border:1px solid #a37b40;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ position:relative;
+}
+
+.cell:nth-child(even){
+ background:#c49c57;
+}
+
+.number{
+ position:absolute;
+ top:2px;
+ left:3px;
+ font:8px Arial;
+ color:#5b3b19;
+}
+
+.piece{
+ width:30px;
+ height:30px;
+ border-radius:50%;
+ border:2px solid #5b3b1a;
+ z-index:2;
+}
+
+.gold{
+ background:#e1b95e;
+}
+
+.black{
+ background:#30251a;
+}
+
+.legal{
+ box-shadow:inset 0 0 0 3px #fff09b;
+}
+
+.info{
+ text-align:center;
+ min-height:35px;
+ padding:10px;
+ color:#dfbd70;
+}
+
+.roll{
+ width:100%;
+ padding:15px;
+ border:0;
+ border-radius:13px;
+ background:linear-gradient(#e4bf6a,#956329);
+ color:#1b1007;
+ font-weight:bold;
+ font-size:16px;
+}
+
+.roll:disabled{
+ opacity:.4;
+}
+
+.back{
+ background:none;
+ border:1px solid #654722;
+ color:#d8ba75;
+ padding:9px 13px;
+ border-radius:10px;
+}
+
+@media(max-width:380px){
+ .piece{
+  width:25px;
+  height:25px;
+ }
+ h1{
+  font-size:24px;
+ }
 }
 </style>
 </head>
 
 <body>
 
-<div id="app">
+<div id="app"></div>
 
-    <div class="ankh">☥</div>
+<script>
 
-    <div class="logo">
-        SENET ROYAL
-    </div>
+const app=document.getElementById("app");
 
-    <div class="subtitle">
-        THE ANCIENT EGYPTIAN GAME
-    </div>
+let turn=0;
+let roll=null;
+let pieces=[];
+let sticks=[];
 
-    <button onclick="alert('Senet Royal is working!')">
-        START GAME
-    </button>
+const path=[
+  1,2,3,4,5,6,7,8,9,10,
+  20,19,18,17,16,15,14,13,12,11,
+  21,22,23,24,25,26,27,28,29,30
+];
 
-</div>
+function setup(){
+
+ pieces=[];
+
+ for(let i=0;i<5;i++){
+  pieces.push({
+   id:"A"+i,
+   player:0,
+   pos:i+1
+  });
+ }
+
+ for(let i=0;i<5;i++){
+  pieces.push({
+   id:"B"+i,
+   player:1,
+   pos:i+1
+  });
+ }
+
+ turn=0;
+ roll=null;
+ sticks=[];
+
+ render();
+
+}
+
+function screen(){
+
+ app.innerHTML=`
+
+ <header>
+
+  <div class="ankh">☥</div>
+
+  <h1>SENET ROYAL</h1>
+
+  <div class="sub">
+   THE ANCIENT EGYPTIAN GAME
+  </div>
+
+ </header>
+
+ <div class="card">
+
+  <div style="text-align:center">
+   Player ${turn===0?"Gold":"Black"} — Turn
+  </div>
+
+  <button class="main" id="start">
+   START GAME
+  </button>
+
+ </div>
+
+ `;
+
+ document.getElementById("start").onclick=setup;
+
+}
+
+function cast(){
+
+ if(roll!==null)return;
+
+ sticks=[];
+
+ for(let i=0;i<4;i++){
+  sticks.push(Math.random()<0.5?0:1);
+ }
+
+ roll=sticks.reduce((a,b)=>a+b,0);
+
+ if(roll===0)roll=5;
+
+ render();
+
+}
+
+function getDestination(pos,n){
+
+ let index=path.indexOf(pos);
+
+ if(index<0)return null;
+
+ let target=index+n;
+
+ if(target>=path.length)return 31;
+
+ return path[target];
+
+}
+
+function canMove(piece){
+
+ if(piece.player!==turn)return false;
+
+ if(roll===null)return false;
+
+ let destination=getDestination(piece.pos,roll);
+
+ if(destination===31)return true;
+
+ if(destination===null)return false;
+
+ return !pieces.some(
+  p=>p.player===piece.player &&
+  p.pos===destination
+ );
+
+}
+
+function move(id){
+
+ if(roll===null)return;
+
+ let piece=pieces.find(p=>p.id===id);
+
+ if(!canMove(piece))return;
+
+ let destination=getDestination(piece.pos,roll);
+
+ if(destination===31){
+
+  piece.pos=31;
+
+ }else{
+
+  let enemy=pieces.find(
+   p=>p.player!==piece.player &&
+   p.pos===destination
+  );
+
+  if(enemy){
+
+   let old=piece.pos;
+
+   enemy.pos=old;
+
+  }
+
+  piece.pos=destination;
+
+ }
+
+ if(pieces.filter(
+  p=>p.player===turn &&
+  p.pos===31
+ ).length===5){
+
+  winner();
+
+  return;
+
+ }
+
+ roll=null;
+ sticks=[];
+
+ turn=turn===0?1:0;
+
+ render();
+
+}
+
+function render(){
+
+ let cells="";
+
+ path.forEach(position=>{
+
+  let legal=false;
+
+  let occupants=pieces.filter(
+   p=>p.pos===position
+  );
+
+  occupants.forEach(p=>{
+   if(canMove(p))legal=true;
+  });
+
+  cells+=`
+
+   <div class="cell ${legal?"legal":""}">
+
+    <span class="number">
+     ${position}
+    </span>
+
+    ${
+     occupants.map(p=>`
+
+      <button
+       class="piece ${p.player===0?"gold":"black"}"
+       data-id="${p.id}">
+      </button>
+
+     `).join("")
+    }
+
+   </div>
+
+  `;
+
+ });
+
+ app.innerHTML=`
+
+ <button class="back" id="home">
+  ← Menu
+ </button>
+
+ <header style="padding-bottom:10px">
+
+  <h1>SENET ROYAL</h1>
+
+  <div class="sub">
+   ${turn===0?"GOLD":"BLACK"} PLAYER TURN
+  </div>
+
+ </header>
+
+ <div class="board">
+
+  <div class="grid">
+   ${cells}
+  </div>
+
+ </div>
+
+ <div class="info">
+
+  ${
+   roll===null
+   ?"Cast the sticks to begin."
+   :"Result: "+roll
+  }
+
+ </div>
+
+ <button
+  class="roll"
+  id="roll"
+  ${roll!==null?"disabled":""}>
+  CAST THE STICKS
+ </button>
+
+ `;
+
+ document
+ .querySelectorAll("[data-id]")
+ .forEach(button=>{
+
+  button.onclick=()=>{
+   move(button.dataset.id);
+  };
+
+ });
+
+ document.getElementById("roll").onclick=cast;
+
+ document.getElementById("home").onclick=screen;
+
+}
+
+function winner(){
+
+ app.innerHTML=`
+
+ <header>
+
+  <div class="ankh">♛</div>
+
+  <h1>VICTORY!</h1>
+
+  <div class="sub">
+   ${turn===0?"GOLD PLAYER WINS":"BLACK PLAYER WINS"}
+  </div>
+
+ </header>
+
+ <div class="card">
+
+  <button class="main" id="again">
+   PLAY AGAIN
+  </button>
+
+ </div>
+
+ `;
+
+ document.getElementById("again").onclick=setup;
+
+}
+
+screen();
+
+</script>
 
 </body>
 </html>
