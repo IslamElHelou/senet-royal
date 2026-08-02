@@ -1,48 +1,380 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#120d08">
-<meta name="description" content="Senet Royal - Ancient Egyptian board game">
-<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#120b06">
 <title>Senet Royal</title>
+
 <style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Georgia,serif;background:#090705;color:#ead29a}
-body{display:flex;justify-content:center}.app{width:min(560px,100%);min-height:100vh;padding:16px;background:radial-gradient(circle at 50% 0,#33200d,#0b0805 48%,#050403)}
-button{font:inherit}.top{display:flex;align-items:center;justify-content:space-between}.icon{background:#17110b;border:1px solid #5b4526;color:#e6c97f;border-radius:13px;padding:10px 13px}.brand{text-align:center;font-size:23px;font-weight:900;letter-spacing:2px}.sub{text-align:center;color:#9e895f;font-size:11px}.hero{text-align:center;padding:24px 0}.sun{font-size:52px;color:#d9b45f}.homecard{background:#14100b;border:1px solid #554021;border-radius:24px;padding:18px}.label{font-size:12px;color:#d9bd79;font-weight:bold;margin:12px 0 8px}.row{display:flex;gap:9px}.choice{flex:1;background:#17110b;color:#cdb98d;border:1px solid #4b3922;border-radius:14px;padding:13px 8px}.choice.active{background:#bd9149;color:#1b1208;border-color:#e0bd70}.play{width:100%;margin-top:18px;border:0;border-radius:15px;padding:16px;background:linear-gradient(#e0ba67,#9d6d2c);font-weight:900;color:#1b1208}.link{width:100%;margin-top:10px;background:none;border:0;color:#cdb77e;padding:10px}.score{display:flex;justify-content:space-between;align-items:center;padding:12px 4px}.scorebox{display:flex;gap:8px;align-items:center}.dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid #9b753a}.gold{background:#d9ae58;color:#241707}.dark{background:#2e2820;color:#e4c77f}.count{font-weight:bold}.board{display:grid;grid-template-columns:repeat(10,1fr);border:3px solid #76572c;border-radius:16px;overflow:hidden;background:#a57d47;box-shadow:0 8px 30px #000}.cell{aspect-ratio:1/.92;background:#d5b777;border:1px solid #a37d45;position:relative;padding:3px;display:flex;align-items:center;justify-content:center}.cell.special{background:#ad8e5b}.num{position:absolute;left:4px;top:3px;font:700 9px Arial;color:#59401f}.sp{position:absolute;right:4px;bottom:3px;font-size:15px;color:#62491f}.piece{width:34px;height:34px;border-radius:50%;border:2px solid #60441e;display:grid;place-items:center;font-weight:900}.piece.dark{border-color:#0e0b08}.cell.active .piece{box-shadow:0 0 0 3px #fff0a4,0 0 14px #e7bd5d}.sticks{height:70px;display:flex;align-items:center;justify-content:center;gap:9px}.stick{width:23px;height:52px;border-radius:7px;background:#d1a65a;border:1px solid #f0d18a;box-shadow:0 4px 10px #000}.stick.light{background:#e3ca91}.stick.dark{background:#4a371f}.controls{text-align:center}.roll{width:100%;padding:15px;border:0;border-radius:15px;background:linear-gradient(#dcb66a,#9b6c2d);font-weight:900;color:#1b1208}.roll:disabled{opacity:.35}.msg{height:24px;text-align:center;color:#e2c579;font-weight:bold}.menu{background:none;border:0;color:#bba677;padding:10px}.overlay{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:25px}.modal{width:min(420px,90%);background:#17110b;border:1px solid #70542c;border-radius:24px;padding:30px;text-align:center}.modal h1{color:#e1bd68}.modal button{width:100%;padding:14px;border:0;border-radius:13px;background:#bd9149;font-weight:bold}.hidden{display:none}.rules{line-height:1.65;color:#c6b591}.rules h2{color:#ddbf77}
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:#080503;
+  color:#f2d79a;
+  font-family:Georgia,"Times New Roman",serif;
+}
+
+body{
+  display:flex;
+  justify-content:center;
+}
+
+button{
+  font-family:inherit;
+  -webkit-tap-highlight-color:transparent;
+}
+
+#app{
+  width:100%;
+  max-width:620px;
+  min-height:100vh;
+  padding:18px;
+  background:
+    radial-gradient(circle at 50% 0%,#4a2b0d 0%,#1c1008 35%,#080503 75%);
+}
+
+/* HOME */
+
+.header{
+  text-align:center;
+  padding:30px 10px 25px;
+}
+
+.ankh{
+  font-size:58px;
+  line-height:1;
+  color:#e5b95e;
+  text-shadow:0 0 25px #d59a35;
+}
+
+.logo{
+  font-size:32px;
+  font-weight:bold;
+  letter-spacing:4px;
+  color:#f1d18b;
+}
+
+.subtitle{
+  margin-top:7px;
+  color:#9d8458;
+  font-size:12px;
+  letter-spacing:2px;
+}
+
+.panel{
+  background:rgba(25,15,8,.95);
+  border:1px solid #6b4b24;
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 15px 40px #000;
+}
+
+.section-title{
+  font-size:13px;
+  color:#b99a61;
+  margin:5px 0 10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.options{
+  display:flex;
+  gap:8px;
+}
+
+.option{
+  flex:1;
+  border:1px solid #634723;
+  border-radius:12px;
+  background:#1d1209;
+  color:#d9bd7b;
+  padding:13px 5px;
+  font-size:14px;
+}
+
+.option.active{
+  background:linear-gradient(#dfb968,#9a6828);
+  color:#1b1006;
+  border-color:#e0b65c;
+  font-weight:bold;
+}
+
+.main-button{
+  width:100%;
+  margin-top:20px;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  background:linear-gradient(#edc978,#a56f2d);
+  color:#1b1006;
+  font-size:17px;
+  font-weight:bold;
+  box-shadow:0 5px 15px #0008;
+}
+
+.secondary{
+  width:100%;
+  border:0;
+  background:none;
+  color:#c6a66b;
+  padding:14px;
+  font-size:14px;
+}
+
+/* GAME */
+
+.game-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.small-button{
+  border:1px solid #604622;
+  background:#171008;
+  color:#e1c17a;
+  border-radius:10px;
+  padding:9px 13px;
+}
+
+.game-title{
+  text-align:center;
+  font-size:20px;
+  letter-spacing:2px;
+}
+
+.turn{
+  text-align:center;
+  color:#dcb96e;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.score{
+  display:flex;
+  justify-content:space-between;
+  background:#130c07;
+  border:1px solid #4e371c;
+  border-radius:14px;
+  padding:12px 16px;
+  margin-bottom:12px;
+}
+
+.player{
+  font-size:14px;
+}
+
+.player.right{
+  text-align:right;
+}
+
+.count{
+  color:#9f8658;
+  font-size:11px;
+  margin-top:3px;
+}
+
+/* BOARD */
+
+.board-wrap{
+  padding:7px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#6c4b24,#b88943,#62431f);
+  box-shadow:0 12px 30px #000;
+}
+
+.board{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  overflow:hidden;
+  border-radius:12px;
+  border:2px solid #3e2812;
+}
+
+.cell{
+  position:relative;
+  aspect-ratio:1/1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#d6b36c;
+  border:1px solid #a0783d;
+}
+
+.cell:nth-child(even){
+  background:#c69f59;
+}
+
+.cell.safe{
+  background:#d9b873;
+}
+
+.cell.home{
+  background:#9f733b;
+}
+
+.number{
+  position:absolute;
+  top:3px;
+  left:4px;
+  font-family:Arial,sans-serif;
+  font-size:8px;
+  color:#5a3a19;
+  opacity:.8;
+}
+
+.mark{
+  position:absolute;
+  bottom:3px;
+  right:4px;
+  font-size:10px;
+  color:#70491c;
+}
+
+/* PIECES */
+
+.piece{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:2px solid #563915;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  font-weight:bold;
+  box-shadow:0 3px 5px #0008;
+  cursor:pointer;
+  z-index:2;
+}
+
+.piece.gold{
+  background:radial-gradient(circle at 35% 30%,#ffe6a0,#c78d35 70%);
+  color:#4b2b0b;
+}
+
+.piece.dark{
+  background:radial-gradient(circle at 35% 30%,#76604a,#241a12 70%);
+  color:#efd28c;
+}
+
+.cell.legal{
+  box-shadow:
+    inset 0 0 0 3px #fff0a0,
+    inset 0 0 18px #d49c35;
+}
+
+/* STICKS */
+
+.sticks{
+  height:78px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+}
+
+.stick{
+  width:21px;
+  height:52px;
+  border-radius:6px;
+  background:#e1bd72;
+  border:1px solid #765221;
+  box-shadow:0 4px 7px #0008;
+  transform:rotate(-3deg);
+}
+
+.stick.dark{
+  background:#392a1b;
+}
+
+.message{
+  min-height:30px;
+  text-align:center;
+  color:#e4c277;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.roll{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  background:linear-gradient(#e5bf6b,#98682b);
+  color:#1c1107;
+  font-size:16px;
+  font-weight:bold;
+  box-shadow:0 5px 15px #0008;
+}
+
+.roll:disabled{
+  opacity:.45;
+}
+
+/* RULES */
+
+.rules{
+  line-height:1.7;
+  color:#cdb889;
+  font-size:14px;
+}
+
+.rules h3{
+  color:#e2bd6e;
+}
+
+/* WIN */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:#000c;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  z-index:10;
+}
+
+.win{
+  width:min(400px,100%);
+  text-align:center;
+  background:#1a1008;
+  border:1px solid #745126;
+  border-radius:24px;
+  padding:30px 22px;
+  box-shadow:0 20px 50px #000;
+}
+
+.crown{
+  font-size:55px;
+}
+
+.win h2{
+  color:#e5bf70;
+  font-size:28px;
+}
+
+@media(max-width:380px){
+  #app{padding:11px}
+  .piece{width:28px;height:28px;font-size:12px}
+  .cell{aspect-ratio:1/.95}
+  .logo{font-size:27px}
+}
 </style>
 </head>
+
 <body>
-<div class="app" id="app"></div>
+
+<div id="app"></div>
+
 <script>
-const A=document.getElementById('app');
-const T={
-en:{title:"SENET ROYAL",sub:"THE ANCIENT EGYPTIAN GAME",play:"PLAY",ai:"PLAY VS AI",local:"TWO PLAYERS",easy:"EASY",normal:"NORMAL",hard:"HARD",level:"AI LEVEL",roll:"CAST THE STICKS",turn:"TURN",you:"YOU",pharaoh:"PHARAOH",newg:"NEW GAME",menu:"MENU",rules:"HOW TO PLAY",back:"BACK",extra:"EXTRA TURN!",blocked:"NO LEGAL MOVE",win:"VICTORY!"},
-ar:{title:"سِنِت الملكية",sub:"اللعبة المصرية القديمة",play:"ابدأ",ai:"ضد الكمبيوتر",local:"لاعبان",easy:"سهل",normal:"متوسط",hard:"صعب",level:"مستوى الكمبيوتر",roll:"ارمِ العصي",turn:"الدور",you:"أنت",pharaoh:"الفرعون",newg:"لعبة جديدة",menu:"القائمة",rules:"طريقة اللعب",back:"رجوع",extra:"دور إضافي!",blocked:"لا توجد حركة قانونية",win:"انتصار!"}
-};
-let lang=localStorage.senetLang||"en", mode="ai", level="normal", turn=0, roll=null, sticks=[], pieces=[], msg="", winner=null, history="";
-const path=[1,2,3,4,5,6,7,8,9,10,20,19,18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,29,30];
-const special={26:"✦",27:"≈",28:"𓂀",29:"☥",30:"△"};
-const tr=()=>T[lang];
-function init(){pieces=[...Array(5)].map((_,i)=>({id:"0-"+i,p:0,pos:i+1})).concat([...Array(5)].map((_,i)=>({id:"1-"+i,p:1,pos:i+1})));turn=0;roll=null;sticks=[];msg="";winner=null;history="";render()}
-function target(pos,r){let i=path.indexOf(pos);return i<0||i+r>=path.length?31+(i+r-path.length):path[i+r]}
-function legal(p,r){if(!r||p.p!==turn||p.pos>30)return false;let t=target(p.pos,r);if(t>30)return false;if(pieces.some(x=>x.p===p.p&&x.pos===t))return false;let enemy=pieces.filter(x=>x.p!==p.p&&x.pos===t);if(enemy.length>=2)return false;return true}
-function cast(){if(turn!==0||roll!==null||winner!==null)return;let s=[0,0,0,0].map(()=>Math.random()<.5?0:1);sticks=s;roll=s.reduce((a,b)=>a+b,0);msg=roll===0?tr().blocked:"";render();if(roll===0)setTimeout(next,650)}
-function move(id){if(roll===null||winner!==null)return;let p=pieces.find(x=>x.id===id);if(!p||!legal(p,roll))return;let t=target(p.pos,roll), victim=pieces.find(x=>x.p!==p.p&&x.pos===t);let old=p.pos;pieces=pieces.map(x=>victim&&x.id===victim.id?({...x,pos:old}):x.id===id?({...x,pos:t}):x);history=(p.p===0?"You":"Pharaoh")+": "+old+" → "+t;let remain=pieces.filter(x=>x.p===p.p&&x.pos<=30).length;if(remain===0){winner=p.p;roll=null;sticks=[];render();return}setTimeout(next,300)}
-function next(){let r=roll;let extra=r===1||r===4;roll=null;sticks=[];if(extra){msg=tr().extra;render();if(turn===1)setTimeout(ai,600)}else{turn=turn?0:1;msg="";render();if(turn===1&&mode==="ai")setTimeout(ai,700)}}
-function ai(){if(winner!==null)return;let s=[0,0,0,0].map(()=>Math.random()<.5?0:1);sticks=s;roll=s.reduce((a,b)=>a+b,0);render();if(!roll){msg=tr().blocked;setTimeout(next,650);return}let opts=pieces.filter(p=>legal(p,roll));if(!opts.length){msg=tr().blocked;setTimeout(next,650);return}let chosen;if(level==="easy")chosen=opts[Math.floor(Math.random()*opts.length)];else if(level==="normal")chosen=[...opts].sort((a,b)=>b.pos-a.pos)[0];else chosen=[...opts].sort((a,b)=>{let sa=target(a.pos,roll)+(pieces.some(x=>x.p===0&&x.pos===target(a.pos,roll))?50:0),sb=target(b.pos,roll)+(pieces.some(x=>x.p===0&&x.pos===target(b.pos,roll))?50:0);return sb-sa})[0];setTimeout(()=>move(chosen.id),650)}
-function render(){
-let t=tr();
-if(winner!==null){A.innerHTML=gameHTML();let o=document.createElement("div");o.className="overlay";o.innerHTML='<div class="modal"><div style="font-size:52px">♛</div><h1>'+t.win+'</h1><p style="font-size:20px">'+(winner===0?t.you:t.pharaoh)+'</p><button id="again">'+t.newg+'</button><button id="home" class="link">'+t.menu+'</button></div>';document.body.appendChild(o);document.getElementById("again").onclick=()=>{o.remove();init()};document.getElementById("home").onclick=()=>{o.remove();home()};return}
-A.innerHTML=screen==="rules"?rulesHTML():screen==="home"?homeHTML():gameHTML();bind()
-}
-let screen="home";
-function homeHTML(){let t=tr();return `<div class="hero"><div class="sun">☀</div><div class="brand">${t.title}</div><div class="sub">${t.sub}</div></div><div class="homecard"><div class="label">${t.play}</div><div class="row"><button id="aiMode" class="choice ${mode==="ai"?"active":""}">${t.ai}</button><button id="localMode" class="choice ${mode==="local"?"active":""}">${t.local}</button></div>${mode==="ai"?`<div class="label">${t.level}</div><div class="row">${["easy","normal","hard"].map(x=>`<button class="choice ${level===x?"active":""}" data-level="${x}">${t[x]}</button>`).join("")}</div>`:""}<button id="play" class="play">${t.play}</button><button id="rules" class="link">☥ &nbsp; ${t.rules}</button></div><button id="lang" class="link">${lang==="en"?"العربية":"English"}</button>`}
-function gameHTML(){let t=tr();let cells=path.map(n=>{let ps=pieces.filter(p=>p.pos===n);let active=ps.some(p=>legal(p,roll));return `<div class="cell ${special[n]?"special ":""}${active?"active":""}"><span class="num">${n}</span>${special[n]?`<span class="sp">${special[n]}</span>`:""}${ps.map(p=>`<button class="piece ${p.p===0?"gold":"dark"}" data-piece="${p.id}">${p.p===0?"◆":"●"}</button>`).join("")}</div>`}).join("");return `<div class="top"><button class="icon" id="back">‹</button><div><div class="brand">${t.title}</div><div class="sub">${t.turn}: ${turn===0?t.you:t.pharaoh}</div></div><button class="icon" id="lang">${lang==="en"?"ع":"EN"}</button></div><div class="score"><div class="scorebox"><div class="dot gold">◆</div><div><b>${t.you}</b><div class="count">${pieces.filter(x=>x.p===0&&x.pos<=30).length}/5</div></div></div><div>☥</div><div class="scorebox"><div><b>${t.pharaoh}</b><div class="count">${pieces.filter(x=>x.p===1&&x.pos<=30).length}/5</div></div><div class="dot dark">●</div></div></div><div class="board">${cells}</div><div class="sticks">${sticks.length?sticks.map(x=>`<div class="stick ${x?"light":"dark"}"></div>`).join(""):"<span style='color:#735b35'>${turn===0?t.roll:"…"}</span>"}</div><div class="controls"><div class="msg">${msg||history||" "}</div><button class="roll" id="roll" ${turn!==0||roll!==null?"disabled":""}>🎲 &nbsp; ${t.roll}</button><button class="menu" id="menu">${t.menu}</button></div>`}
-function rulesHTML(){let t=tr();return `<div class="top"><button class="icon" id="back">‹</button><div class="brand">${t.rules}</div><div></div></div><div class="rules"><h2>${lang==="ar"?"الهدف":"Objective"}</h2><p>${lang==="ar"?"أخرج قطعك الخمس من المسار قبل خصمك. يتحرك المسار بشكل متعرج حتى الخانة 30.":"Move all five pieces off the board before your opponent. The path winds to square 30."}</p><h2>${lang==="ar"?"العصي":"Sticks"}</h2><p>${lang==="ar"?"أربع عصي تعطي نتيجة من 0 إلى 4. نتيجة 1 أو 4 تمنح دورًا إضافيًا.":"Four sticks give a result from 0 to 4. Rolling 1 or 4 gives an extra turn."}</p><h2>${lang==="ar"?"الخانات الخاصة":"Special squares"}</h2><p>${lang==="ar"?"الخانات 26 إلى 30 تحمل رموزًا خاصة، والخانة 27 هي الماء.":"Squares 26 to 30 are special; 27 is the Water square."}</p><h2>${lang==="ar"?"ملاحظة":"Note"}</h2><p>${lang==="ar"?"القواعد المصرية القديمة الكاملة غير محفوظة، لذلك تستخدم هذه النسخة إعادة بناء حديثة قابلة للعب.":"The complete ancient rules are not preserved, so this is a modern playable reconstruction."}</p></div>`}
-function bind(){let el=id=>document.getElementById(id);if(el("lang"))el("lang").onclick=()=>{lang=lang==="en"?"ar":"en";localStorage.senetLang=lang;render()};if(el("back"))el("back").onclick=()=>home();if(el("roll"))el("roll").onclick=cast;if(el("menu"))el("menu").onclick=home;if(el("rules"))el("rules").onclick=()=>{screen="rules";render()};document.querySelectorAll("[data-piece]").forEach(b=>b.onclick=()=>move(b.dataset.piece));document.querySelectorAll("[data-level]").forEach(b=>b.onclick=()=>{level=b.dataset.level;render()});if(el("aiMode"))el("aiMode").onclick=()=>{mode="ai";render()};if(el("localMode"))el("localMode").onclick=()=>{mode="local";render()};if(el("play"))el("play").onclick=()=>{screen="game";init()}}
-function home(){screen="home";render()}
-render();
-</script>
-</body></html>
+"use strict";
+
+/
