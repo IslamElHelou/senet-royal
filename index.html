@@ -1,489 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100904">
 <title>Senet Royal</title>
-
 <style>
-*{box-sizing:border-box}
-
-body{
- margin:0;
- background:#090604;
- color:#efd18b;
- font-family:Georgia,serif;
-}
-
-#app{
- max-width:620px;
- margin:auto;
- min-height:100vh;
- padding:16px;
-}
-
-header{
- text-align:center;
- padding:20px 0;
-}
-
-.ankh{
- font-size:55px;
- color:#e3b65c;
-}
-
-h1{
- margin:5px 0;
- font-size:28px;
- letter-spacing:3px;
-}
-
-.sub{
- color:#a88b59;
- font-size:11px;
- letter-spacing:2px;
-}
-
-.card{
- background:#171009;
- border:1px solid #654722;
- border-radius:20px;
- padding:18px;
-}
-
-button{
- font-family:inherit;
- cursor:pointer;
-}
-
-.main{
- width:100%;
- border:0;
- border-radius:13px;
- padding:16px;
- margin-top:15px;
- background:linear-gradient(#e5c16d,#99672b);
- color:#1b1007;
- font-size:17px;
- font-weight:bold;
-}
-
-.board{
- margin-top:18px;
- padding:6px;
- background:#815b2d;
- border-radius:15px;
-}
-
-.grid{
- display:grid;
- grid-template-columns:repeat(10,1fr);
- border-radius:10px;
- overflow:hidden;
-}
-
-.cell{
- aspect-ratio:1;
- background:#d5b36c;
- border:1px solid #a37b40;
- display:flex;
- align-items:center;
- justify-content:center;
- position:relative;
-}
-
-.cell:nth-child(even){
- background:#c49c57;
-}
-
-.number{
- position:absolute;
- top:2px;
- left:3px;
- font:8px Arial;
- color:#5b3b19;
-}
-
-.piece{
- width:30px;
- height:30px;
- border-radius:50%;
- border:2px solid #5b3b1a;
- z-index:2;
-}
-
-.gold{
- background:#e1b95e;
-}
-
-.black{
- background:#30251a;
-}
-
-.legal{
- box-shadow:inset 0 0 0 3px #fff09b;
-}
-
-.info{
- text-align:center;
- min-height:35px;
- padding:10px;
- color:#dfbd70;
-}
-
-.roll{
- width:100%;
- padding:15px;
- border:0;
- border-radius:13px;
- background:linear-gradient(#e4bf6a,#956329);
- color:#1b1007;
- font-weight:bold;
- font-size:16px;
-}
-
-.roll:disabled{
- opacity:.4;
-}
-
-.back{
- background:none;
- border:1px solid #654722;
- color:#d8ba75;
- padding:9px 13px;
- border-radius:10px;
-}
-
-@media(max-width:380px){
- .piece{
-  width:25px;
-  height:25px;
- }
- h1{
-  font-size:24px;
- }
-}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080503;color:#f1d18b;font-family:Georgia,serif}
+body{display:flex;justify-content:center}button{font:inherit;touch-action:manipulation}
+#app{width:100%;max-width:640px;min-height:100vh;padding:14px;background:radial-gradient(circle at 50% 0,#4a2b0d,#1b0f07 38%,#080503 75%)}
+header{text-align:center;padding:24px 5px}.ankh{font-size:55px;color:#e5b95e}.logo{font-size:30px;font-weight:bold;letter-spacing:4px}.sub{font-size:11px;letter-spacing:2px;color:#aa8c58;margin-top:5px}
+.card{background:#180e08;border:1px solid #684923;border-radius:20px;padding:18px;box-shadow:0 15px 35px #000}
+.label{font-size:11px;color:#b99a61;letter-spacing:1px;margin:4px 0 8px}.opts{display:flex;gap:7px}.opt,.small{border:1px solid #604321;background:#201209;color:#dabb76;border-radius:10px;padding:10px}.opt{flex:1}.active{background:linear-gradient(#e6c16d,#98662b);color:#1b0e05;font-weight:bold}
+.main,.roll{width:100%;border:0;border-radius:13px;padding:15px;margin-top:16px;background:linear-gradient(#ebc774,#9b682b);color:#1b0e05;font-weight:bold}.secondary{width:100%;border:0;background:none;color:#c8a96b;padding:13px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.title{text-align:center;font-size:19px;letter-spacing:2px}.turn{text-align:center;font-size:11px;color:#dcb96d;margin-top:2px}.score{display:flex;justify-content:space-between;margin:10px 0;padding:10px 13px;background:#130b06;border:1px solid #4e361b;border-radius:13px;font-size:13px}.right{text-align:right}.count{font-size:10px;color:#9d8050}
+.boardwrap{padding:6px;background:linear-gradient(135deg,#69481f,#b98940,#60401d);border-radius:17px;box-shadow:0 12px 28px #000}.board{display:grid;grid-template-columns:repeat(10,1fr);overflow:hidden;border:2px solid #3d2710;border-radius:11px}.cell{position:relative;aspect-ratio:1;background:#d6b46d;border:1px solid #a0783e;display:flex;align-items:center;justify-content:center}.cell:nth-child(even){background:#c49c57}.special{background:#dcb977!important}.num{position:absolute;top:2px;left:3px;font:8px Arial;color:#5a3a18}.mark{position:absolute;bottom:2px;right:3px;font-size:9px}.legal{box-shadow:inset 0 0 0 3px #fff09b,inset 0 0 15px #d59b34}.piece{width:31px;height:31px;border-radius:50%;border:2px solid #573813;z-index:2;box-shadow:0 3px 5px #0008}.p0{background:radial-gradient(circle at 35% 25%,#fff0b0,#c88d31 70%)}.p1{background:radial-gradient(circle at 35% 25%,#76604a,#241a12 70%)}.stack{display:flex;gap:2px}.sticks{height:64px;display:flex;justify-content:center;align-items:center;gap:7px}.stick{width:19px;height:48px;border-radius:6px;background:#e3c078;border:1px solid #765221}.dark{background:#38291b}.msg{text-align:center;min-height:28px;font-size:13px;color:#e3c173;padding:4px}.roll:disabled{opacity:.45}.rules{line-height:1.65;color:#cdb788;font-size:13px}.rules h3{color:#e1bd6d}.overlay{position:fixed;inset:0;background:#000c;display:flex;align-items:center;justify-content:center;padding:22px}.win{width:min(400px,100%);background:#1a1008;border:1px solid #765226;border-radius:22px;text-align:center;padding:28px;box-shadow:0 20px 50px #000}.crown{font-size:52px}.win h2{color:#e6c170}
+@media(max-width:390px){#app{padding:9px}.piece{width:27px;height:27px}.logo{font-size:25px}}
 </style>
 </head>
-
-<body>
-
-<div id="app"></div>
-
+<body><div id="app"></div>
 <script>
+const TX={
+en:{title:"SENET ROYAL",sub:"THE ANCIENT EGYPTIAN GAME",play:"PLAY",ai:"VS COMPUTER",two:"TWO PLAYERS",easy:"EASY",normal:"NORMAL",hard:"HARD",rules:"RULES",lang:"العربية",menu:"MENU",newg:"NEW GAME",turn:"TURN",you:"YOU",pharaoh:"PHARAOH",roll:"CAST THE STICKS",choose:"Choose a highlighted piece.",blocked:"No legal move — turn passes.",extra:"Extra turn!",win:"VICTORY!",yw:"You win!",aw:"Pharaoh wins!",again:"PLAY AGAIN",back:"BACK"},
+ar:{title:"سِنِت الملكي",sub:"اللعبة المصرية القديمة",play:"ابدأ اللعب",ai:"ضد الكمبيوتر",two:"لاعبان",easy:"سهل",normal:"متوسط",hard:"صعب",rules:"القواعد",lang:"English",menu:"القائمة",newg:"لعبة جديدة",turn:"الدور",you:"أنت",pharaoh:"الفرعون",roll:"ارمِ العصي",choose:"اختر قطعة مضيئة.",blocked:"لا توجد حركة — ينتقل الدور.",extra:"دور إضافي!",win:"انتصار!",yw:"لقد فزت!",aw:"الفرعون فاز!",again:"العب مرة أخرى",back:"رجوع"}
+};
+let lang=localStorage.senetLang||"en",mode="ai",level="normal",turn=0,roll=null,sticks=[],pieces=[],winner=null,msg="";
+const path=[1,2,3,4,5,6,7,8,9,10,20,19,18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,29,30];
+const safe=new Set([15,26,28,29,30]),t=k=>TX[lang][k];
 
-const app=document.getElementById("app");
-
-let turn=0;
-let roll=null;
-let pieces=[];
-let sticks=[];
-
-const path=[
-  1,2,3,4,5,6,7,8,9,10,
-  20,19,18,17,16,15,14,13,12,11,
-  21,22,23,24,25,26,27,28,29,30
-];
-
-function setup(){
-
- pieces=[];
-
- for(let i=0;i<5;i++){
-  pieces.push({
-   id:"A"+i,
-   player:0,
-   pos:i+1
-  });
- }
-
- for(let i=0;i<5;i++){
-  pieces.push({
-   id:"B"+i,
-   player:1,
-   pos:i+1
-  });
- }
-
- turn=0;
- roll=null;
- sticks=[];
-
- render();
-
+function home(){
+app.innerHTML=`<header><div class="ankh">☥</div><div class="logo">${t("title")}</div><div class="sub">${t("sub")}</div></header><div class="card">
+<div class="label">${t("play")}</div><div class="opts"><button class="opt ${mode==="ai"?"active":""}" id="ai">${t("ai")}</button><button class="opt ${mode==="two"?"active":""}" id="two">${t("two")}</button></div>
+${mode==="ai"?`<div class="label" style="margin-top:16px">LEVEL</div><div class="opts">${["easy","normal","hard"].map(x=>`<button class="opt ${level===x?"active":""}" data-l="${x}">${t(x)}</button>`).join("")}</div>`:""}
+<button class="main" id="start">${t("play")}</button><button class="secondary" id="rules">${t("rules")}</button><button class="secondary" id="lang">${t("lang")}</button></div>`;
+ai.onclick=()=>{mode="ai";home()};two.onclick=()=>{mode="two";home()};
+document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{level=b.dataset.l;home()});
+start.onclick=start;lang.onclick=()=>{lang=lang==="en"?"ar":"en";localStorage.senetLang=lang;home()};rules.onclick=rules;
 }
-
-function screen(){
-
- app.innerHTML=`
-
- <header>
-
-  <div class="ankh">☥</div>
-
-  <h1>SENET ROYAL</h1>
-
-  <div class="sub">
-   THE ANCIENT EGYPTIAN GAME
-  </div>
-
- </header>
-
- <div class="card">
-
-  <div style="text-align:center">
-   Player ${turn===0?"Gold":"Black"} — Turn
-  </div>
-
-  <button class="main" id="start">
-   START GAME
-  </button>
-
- </div>
-
- `;
-
- document.getElementById("start").onclick=setup;
-
-}
-
-function cast(){
-
- if(roll!==null)return;
-
- sticks=[];
-
- for(let i=0;i<4;i++){
-  sticks.push(Math.random()<0.5?0:1);
- }
-
- roll=sticks.reduce((a,b)=>a+b,0);
-
- if(roll===0)roll=5;
-
- render();
-
-}
-
-function getDestination(pos,n){
-
- let index=path.indexOf(pos);
-
- if(index<0)return null;
-
- let target=index+n;
-
- if(target>=path.length)return 31;
-
- return path[target];
-
-}
-
-function canMove(piece){
-
- if(piece.player!==turn)return false;
-
- if(roll===null)return false;
-
- let destination=getDestination(piece.pos,roll);
-
- if(destination===31)return true;
-
- if(destination===null)return false;
-
- return !pieces.some(
-  p=>p.player===piece.player &&
-  p.pos===destination
- );
-
-}
-
-function move(id){
-
- if(roll===null)return;
-
- let piece=pieces.find(p=>p.id===id);
-
- if(!canMove(piece))return;
-
- let destination=getDestination(piece.pos,roll);
-
- if(destination===31){
-
-  piece.pos=31;
-
- }else{
-
-  let enemy=pieces.find(
-   p=>p.player!==piece.player &&
-   p.pos===destination
-  );
-
-  if(enemy){
-
-   let old=piece.pos;
-
-   enemy.pos=old;
-
-  }
-
-  piece.pos=destination;
-
- }
-
- if(pieces.filter(
-  p=>p.player===turn &&
-  p.pos===31
- ).length===5){
-
-  winner();
-
-  return;
-
- }
-
- roll=null;
- sticks=[];
-
- turn=turn===0?1:0;
-
- render();
-
-}
-
+function rules(){app.innerHTML=`<div class="top"><button class="small" id="back">← ${t("back")}</button><div class="title">${t("rules")}</div></div><div class="card rules"><h3>☥</h3><p>${lang==="en"?"Move all five pieces off the board before your opponent.":"أخرج قطعك الخمس من اللوحة قبل خصمك."}</p><h3>🎲</h3><p>${lang==="en"?"Cast four sticks. The number of light sides is your move; four dark sides counts as 5. Results 1, 4 and 5 give an extra turn.":"ارمِ أربع عصي. عدد الجوانب الفاتحة هو عدد الخطوات؛ أربع جوانب داكنة تعطي 5. النتائج 1 و4 و5 تمنح دوراً إضافياً."}</p></div>`;back.onclick=home}
+function start(){pieces=[];for(let i=0;i<5;i++)pieces.push({id:i,p:0,pos:i*2+1});for(let i=0;i<5;i++)pieces.push({id:i+5,p:1,pos:i*2+2});turn=0;roll=null;sticks=[];winner=null;msg=t("choose");render()}
+function dest(pos,n){let i=path.indexOf(pos);if(i<0)return null;return i+n>=30?"OUT":path[i+n]}
+function can(p){if(!p||p.p!==turn||roll===null||p.pos==="OUT")return false;let d=dest(p.pos,roll);if(d==="OUT")return true;let a=pieces.filter(x=>x.pos===d);return !a.some(x=>x.p===p.p)&&a.filter(x=>x.p!==p.p).length<2}
+function legal(){return roll===null?[]:pieces.filter(can)}
+function cast(){if(roll!==null||winner!==null||(mode==="ai"&&turn===1))return;sticks=Array.from({length:4},()=>Math.random()<.5?1:0);roll=sticks.reduce((a,b)=>a+b,0)||5;msg=legal().length?`${t("roll")}: ${roll} — ${t("choose")}`:t("blocked");render();if(!legal().length)setTimeout(next,800)}
+function move(id){let p=pieces.find(x=>x.id===id);if(!can(p))return;let d=dest(p.pos,roll);if(d==="OUT")p.pos="OUT";else{let e=pieces.find(x=>x.p!==p.p&&x.pos===d);if(e){let old=p.pos;e.pos=old}p.pos=d}if(pieces.filter(x=>x.p===turn&&x.pos==="OUT").length===5){winner=turn;roll=null;sticks=[];render();return}let r=roll;roll=null;sticks=[];if([1,4,5].includes(r)){msg=t("extra");render();if(mode==="ai"&&turn===1)setTimeout(ai,650)}else{turn=1-turn;msg=t("choose");render();if(mode==="ai"&&turn===1)setTimeout(ai,650)}}
+function next(){let r=roll;roll=null;sticks=[];if([1,4,5].includes(r)){msg=t("extra");render()}else{turn=1-turn;msg=t("choose");render();if(mode==="ai"&&turn===1)setTimeout(ai,650)}}
+function ai(){if(winner!==null||turn!==1)return;sticks=Array.from({length:4},()=>Math.random()<.5?1:0);roll=sticks.reduce((a,b)=>a+b,0)||5;let o=legal();if(!o.length){msg=t("blocked");render();setTimeout(next,700);return}let pick;if(level==="easy")pick=o[Math.floor(Math.random()*o.length)];else{pick=o.slice().sort((a,b)=>{let x=dest(a.pos,roll),y=dest(b.pos,roll);return (y==="OUT"?100:x==="OUT"?-100:path.indexOf(y)-path.indexOf(x))})[0];if(level==="normal"&&Math.random()<.25)pick=o[Math.floor(Math.random()*o.length)]}msg=`${t("roll")}: ${roll}`;render();setTimeout(()=>move(pick.id),650)}
 function render(){
-
- let cells="";
-
- path.forEach(position=>{
-
-  let legal=false;
-
-  let occupants=pieces.filter(
-   p=>p.pos===position
-  );
-
-  occupants.forEach(p=>{
-   if(canMove(p))legal=true;
-  });
-
-  cells+=`
-
-   <div class="cell ${legal?"legal":""}">
-
-    <span class="number">
-     ${position}
-    </span>
-
-    ${
-     occupants.map(p=>`
-
-      <button
-       class="piece ${p.player===0?"gold":"black"}"
-       data-id="${p.id}">
-      </button>
-
-     `).join("")
-    }
-
-   </div>
-
-  `;
-
- });
-
- app.innerHTML=`
-
- <button class="back" id="home">
-  ← Menu
- </button>
-
- <header style="padding-bottom:10px">
-
-  <h1>SENET ROYAL</h1>
-
-  <div class="sub">
-   ${turn===0?"GOLD":"BLACK"} PLAYER TURN
-  </div>
-
- </header>
-
- <div class="board">
-
-  <div class="grid">
-   ${cells}
-  </div>
-
- </div>
-
- <div class="info">
-
-  ${
-   roll===null
-   ?"Cast the sticks to begin."
-   :"Result: "+roll
-  }
-
- </div>
-
- <button
-  class="roll"
-  id="roll"
-  ${roll!==null?"disabled":""}>
-  CAST THE STICKS
- </button>
-
- `;
-
- document
- .querySelectorAll("[data-id]")
- .forEach(button=>{
-
-  button.onclick=()=>{
-   move(button.dataset.id);
-  };
-
- });
-
- document.getElementById("roll").onclick=cast;
-
- document.getElementById("home").onclick=screen;
-
+let a=pieces.filter(p=>p.p===0&&p.pos!=="OUT").length,b=pieces.filter(p=>p.p===1&&p.pos!=="OUT").length,cells="";
+path.forEach(q=>{let ps=pieces.filter(p=>p.pos===q),legalCell=ps.some(can);cells+=`<div class="cell ${safe.has(q)?"special":""} ${legalCell?"legal":""}"><span class="num">${q}</span>${safe.has(q)?`<span class="mark">${q===26?"💧":"✦"}</span>`:""}<div class="stack">${ps.map(p=>`<button class="piece ${p.p?"p1":"p0"}" data-p="${p.id}">${p.p?"●":"◆"}</button>`).join("")}</div></div>`});
+app.innerHTML=`<div class="top"><button class="small" id="menu">☰ ${t("menu")}</button><div><div class="title">${t("title")}</div><div class="turn">${t("turn")}: ${turn?t("pharaoh"):t("you")}</div></div><button class="small" id="new">${t("newg")}</button></div><div class="score"><div>${t("you")}<div class="count">${a}/5</div></div><div class="right">${t("pharaoh")}<div class="count">${b}/5</div></div></div><div class="boardwrap"><div class="board">${cells}</div></div><div class="sticks">${sticks.map(x=>`<span class="stick ${x?"":"dark"}"></span>`).join("")}</div><div class="msg">${msg}</div><button class="roll" id="cast" ${roll!==null||winner!==null||(mode==="ai"&&turn===1)?"disabled":""}>${roll===null?t("roll"):`${t("roll")}: ${roll}`}</button><button class="secondary" id="switch">${t("lang")}</button>`;
+document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>move(+b.dataset.p));cast.onclick=cast;menu.onclick=home;new.onclick=start;switch.onclick=()=>{lang=lang==="en"?"ar":"en";localStorage.senetLang=lang;render()};if(winner!==null)win();
 }
-
-function winner(){
-
- app.innerHTML=`
-
- <header>
-
-  <div class="ankh">♛</div>
-
-  <h1>VICTORY!</h1>
-
-  <div class="sub">
-   ${turn===0?"GOLD PLAYER WINS":"BLACK PLAYER WINS"}
-  </div>
-
- </header>
-
- <div class="card">
-
-  <button class="main" id="again">
-   PLAY AGAIN
-  </button>
-
- </div>
-
- `;
-
- document.getElementById("again").onclick=setup;
-
-}
-
-screen();
-
+function win(){let o=document.createElement("div");o.className="overlay";o.innerHTML=`<div class="win"><div class="crown">♛</div><h2>${t("win")}</h2><p>${winner===0?t("yw"):t("aw")}</p><button class="main" id="again">${t("again")}</button><button class="secondary" id="wm">${t("menu")}</button></div>`;app.appendChild(o);again.onclick=start;wm.onclick=home}
+home();
 </script>
-
 </body>
 </html>
